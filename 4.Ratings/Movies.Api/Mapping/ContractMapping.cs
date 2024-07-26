@@ -16,7 +16,7 @@ public static class ContractMapping
             Genres = request.Genres.ToList()
         };
     }
-    
+
     public static Movie MapToMovie(this UpdateMovieRequest request, Guid id)
     {
         return new Movie
@@ -35,16 +35,34 @@ public static class ContractMapping
             Id = movie.Id,
             Title = movie.Title,
             Slug = movie.Slug,
+            Rating = movie.Rating,
+            UserRating = movie.UserRating,
             YearOfRelease = movie.YearOfRelease,
             Genres = movie.Genres
         };
     }
 
-    public static MoviesResponse MapToResponse(this IEnumerable<Movie> movies)
+    public static IEnumerable<MovieResponse> MapToResponse(this IEnumerable<Movie> movies)
     {
-        return new MoviesResponse
+        return movies.Select(x => new MovieResponse
         {
-            Items = movies.Select(MapToResponse)
-        };
+            Id = x.Id,
+            Title = x.Title,
+            Slug = x.Slug,
+            Rating = x.Rating,
+            UserRating = x.UserRating,
+            YearOfRelease = x.YearOfRelease,
+            Genres = x.Genres
+        });
+    }
+
+    public static IEnumerable<MovieRatingResponse> MapToResponse(this IEnumerable<MovieRating> ratings)
+    {
+        return ratings.Select(x => new MovieRatingResponse
+        {
+            Rating = x.Rating,
+            MovieId = x.MovieId,
+            Slug = x.Slug
+        });
     }
 }
